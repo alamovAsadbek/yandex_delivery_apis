@@ -15,7 +15,6 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         password = validated_data.pop('password', None)
         confirm_password = validated_data.pop('confirm_password', None)
-        print(validated_data['phone_number'])
         phone_number = validated_data['phone_number']
         username = phone_number
         if password != confirm_password:
@@ -34,3 +33,19 @@ class RegisterSerializer(serializers.ModelSerializer):
         user.set_password(password)
         user.save()
         return user
+
+    def validate_phone_number(self, value):
+        if not value.isdigit():
+            raise serializers.ValidationError('Phone number must be a number.')
+        elif UserModel.objects.filter(phone_number=value).exists():
+            raise serializers.ValidationError('This phone number is already registered.')
+        return value
+
+    def validate_password(self, value):
+        if len(value) < 8:
+            raise serializers.ValidationError('Password must be at least 8 characters long.')
+        elif not any(char.isdigit() for char in value):
+            raise serializers.ValidationError('Password must contain at least one digit.')
+        elif not any(char.isalpha() for char in value):
+            raise serializers.ValidationError('Password must contain at least one letter.')
+        return value
