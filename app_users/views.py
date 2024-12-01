@@ -1,4 +1,4 @@
-from rest_framework import generics, status, viewsets
+from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -13,16 +13,6 @@ class UserListView(viewsets.ModelViewSet):
     queryset = UserModel.objects.all()
     # permission_classes = [IsAdminUser]
     pagination_class = CustomPagination
-
-    def perform_create(self, serializer):
-        serializer.save()
-
-
-class RegisterView(generics.CreateAPIView):
-    serializer_class = RegisterSerializer
-    queryset = UserModel.objects.all()
-
-    # permission_classes = [IsAdminUser]
 
     def perform_create(self, serializer):
         serializer.save()
