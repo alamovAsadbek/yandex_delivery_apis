@@ -8,7 +8,7 @@ from .models import UserModel
 from .serializers import RegisterSerializer, LoginSerializer
 
 
-class UserView(generics.GenericAPIView):
+class UserListView(generics.GenericAPIView):
     serializer_class = RegisterSerializer
     queryset = UserModel.objects.all()
     # permission_classes = [IsAdminUser]
