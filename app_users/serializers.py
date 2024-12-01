@@ -54,3 +54,9 @@ class RegisterSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.ModelSerializer):
     phone_number = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = UserModel
+        fields = ['phone_number', 'password']
+
+
