@@ -25,7 +25,9 @@ class RegisterSerializer(serializers.ModelSerializer):
         # Check if phone number already exists
         if UserModel.objects.filter(phone_number=phone_number).exists():
             raise serializers.ValidationError({'phone_number': 'This phone number is already registered.'})
-
+        elif UserModel.objects.filter(username=phone_number).exists():
+            raise serializers.ValidationError({'phone_number': 'This phone number is already registered.'})
+        
         # Create the user
         validated_data['username'] = validated_data.pop('phone_number')
         user = UserModel.objects.create_user(**validated_data)
