@@ -4,6 +4,10 @@ from .models import UserModel
 
 
 class UserModelSerializer(serializers.ModelSerializer):
+    """
+    Serializer for UserModel. It includes the create method to create a new user.
+    """
+
     confirm_password = serializers.CharField(write_only=True)
 
     class Meta:
@@ -53,15 +57,12 @@ class UserModelSerializer(serializers.ModelSerializer):
 
 
 class LoginSerializer(serializers.ModelSerializer):
+    """
+    Serializer for login. It includes the fields for phone_number and password.
+    """
     phone_number = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True)
 
     class Meta:
         model = UserModel
         fields = ['phone_number', 'password']
-
-
-class DeleteUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserModel
-        fields = ['id', 'first_name', 'last_name', 'phone_number', 'email', 'is_active', 'is_staff', 'is_superuser']
