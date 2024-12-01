@@ -13,3 +13,11 @@ class RegisterSerializer(serializers.ModelSerializer):
         model = UserModel
         fields = ['id', 'first_name', 'last_name', 'password', 'confirm_password']
         extra_kwargs = {'password': {'write_only': True}}
+
+    def create(self, validated_data):
+        user = UserModel.objects.create_user(
+            first_name=validated_data['first_name'],
+            last_name=validated_data['last_name'],
+            phone_number=validated_data['phone_number'],
+            password=validated_data['password']
+        )
