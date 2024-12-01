@@ -2,6 +2,26 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
+class ChooseUserModel():
+    """
+    ChooseUserModel is a class that contains the choices for the user model.
+    It is used to populate the choices field of the user model.
+    """
+
+    CHOOSE_ROLE = (
+        ('admin', 'Admin'),
+        ('user', 'User'),
+        ('restaurant', 'Restaurant'),
+        ('delivery', 'Delivery'),
+    )
+
+    CHOOSE_STATUS = (
+        ('active', 'Active'),
+        ('delete', 'Delete'),
+        ('inactive', 'Inactive'),
+    )
+
+
 class UserModel(AbstractUser):
     """
     UserModel is a custom user model that extends the AbstractUser model provided by Django.
@@ -12,23 +32,9 @@ class UserModel(AbstractUser):
     The first_name and last_name fields are CharFields to store the user's first and last names.
     """
 
-    # choices for role
-    CHOOSE_ROLE = (
-        ('admin', 'Admin'),
-        ('user', 'User'),
-        ('restaurant', 'Restaurant'),
-        ('delivery', 'Delivery'),
-    )
-
-    # choices for status
-    CHOOSE_STATUS = (
-        ('active', 'Active'),
-        ('delete', 'Delete'),
-        ('inactive', 'Inactive'),
-    )
     # fields
-    role = models.CharField(default='user', max_length=100, choices=CHOOSE_ROLE)
-    status = models.CharField(default='active', max_length=100, choices=CHOOSE_STATUS)
+    role = models.CharField(default='user', max_length=100, choices=ChooseUserModel.CHOOSE_ROLE)
+    status = models.CharField(default='active', max_length=100, choices=ChooseUserModel.CHOOSE_STATUS)
     phone_number = models.CharField(max_length=15, unique=True)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
