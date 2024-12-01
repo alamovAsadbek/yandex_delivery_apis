@@ -31,8 +31,14 @@ class LoginView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+        refresh = RefreshToken.for_user(serializer.validated_data['user'])
         response = {
-            'success': True
+            'success': True,
+            'message': 'Login successful',
+            'token': {
+                'access': str(refresh.access_token),
+                'refresh': str(refresh)
+            }
         }
         return Response(response, status=status.HTTP_200_OK)
 
