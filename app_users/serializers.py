@@ -1,11 +1,10 @@
 from rest_framework import serializers
+
 from .models import UserModel
 
 
 class RegisterSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True)
-    first_name = serializers.CharField(required=True)
-    last_name = serializers.CharField(required=True)
 
     class Meta:
         model = UserModel
