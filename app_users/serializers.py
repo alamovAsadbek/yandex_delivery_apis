@@ -49,3 +49,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         elif not any(char.isalpha() for char in value):
             raise serializers.ValidationError('Password must contain at least one letter.')
         return value
+
+
+class LoginSerializer(serializers.ModelSerializer):
+    phone_number = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
