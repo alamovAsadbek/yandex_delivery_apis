@@ -28,6 +28,9 @@ INSTALLED_APPS = [
     # rest framework
     'rest_framework',
 
+    # jwt auth
+    'rest_framework_simplejwt',
+
     # my apps
     'app_users',
     'app_users',
