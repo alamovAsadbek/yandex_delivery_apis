@@ -6,6 +6,14 @@ from .models import UserModel
 from .serializers import RegisterSerializer, LoginSerializer
 
 
+class UserView(generics.GenericAPIView):
+    serializer_class = RegisterSerializer
+    queryset = UserModel.objects.all()
+
+    def get_queryset(self):
+        return UserModel.objects.filter(id=self.request.user.id)
+
+
 class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
     queryset = UserModel.objects.all()
