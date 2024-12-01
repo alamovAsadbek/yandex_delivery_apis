@@ -2,6 +2,7 @@ from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from app_common.pagination import CustomPagination
 from .models import UserModel
 from .serializers import RegisterSerializer, LoginSerializer
 
@@ -9,6 +10,8 @@ from .serializers import RegisterSerializer, LoginSerializer
 class UserView(generics.GenericAPIView):
     serializer_class = RegisterSerializer
     queryset = UserModel.objects.all()
+    # permission_classes = [IsAdminUser]
+    pagination_class = CustomPagination
 
     def get_queryset(self):
         return UserModel.objects.filter(id=self.request.user.id)
