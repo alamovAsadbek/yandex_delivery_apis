@@ -27,7 +27,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'phone_number': 'This phone number is already registered.'})
         elif UserModel.objects.filter(username=phone_number).exists():
             raise serializers.ValidationError({'phone_number': 'This phone number is already registered.'})
-        
+
         # Create the user
         validated_data['username'] = validated_data.pop('phone_number')
         user = UserModel.objects.create_user(**validated_data)
@@ -59,3 +59,9 @@ class LoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
         fields = ['phone_number', 'password']
+
+
+class DeleteUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserModel
+        fields = ['id', 'first_name', 'last_name', 'phone_number', 'email', 'is_active', 'is_staff', 'is_superuser']
