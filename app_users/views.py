@@ -5,11 +5,11 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from app_common.pagination import CustomPagination
 from .models import UserModel
-from .serializers import RegisterSerializer, LoginSerializer
+from .serializers import UserModelSerializer, LoginSerializer
 
 
 class UserListView(viewsets.ModelViewSet):
-    serializer_class = RegisterSerializer
+    serializer_class = UserModelSerializer
     queryset = UserModel.objects.all()
     # permission_classes = [IsAdminUser]
     pagination_class = CustomPagination
