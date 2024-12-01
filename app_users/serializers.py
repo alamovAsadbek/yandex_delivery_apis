@@ -3,7 +3,7 @@ from rest_framework import serializers
 from .models import UserModel
 
 
-class RegisterSerializer(serializers.ModelSerializer):
+class UserModelSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True)
 
     class Meta:
