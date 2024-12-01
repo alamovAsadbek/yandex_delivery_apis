@@ -15,12 +15,17 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         password = validated_data.pop('password', None)
         confirm_password = validated_data.pop('confirm_password', None)
-        phone_number = validated_data.pop('phone_number', None)
+        print(validated_data['phone_number'])
+        phone_number = validated_data['phone_number']
+        username = phone_number
         if password != confirm_password:
             raise serializers.ValidationError({'password': 'Passwords do not match.'})
 
+        if not phone_number:
+            raise serializers.ValidationError({'phone_number': 'This field is required.'})
+
         # Check if phone number already exists
-        if UserModel.objects.filter(phone_number=phone_number).exists():
+        if UserModel.objects.filter(username=phone_number).exists():
             raise serializers.ValidationError({'phone_number': 'This phone number is already registered.'})
 
         # Create the user
