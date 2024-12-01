@@ -16,7 +16,6 @@ class RegisterSerializer(serializers.ModelSerializer):
         password = validated_data.pop('password', None)
         confirm_password = validated_data.pop('confirm_password', None)
         phone_number = validated_data['phone_number']
-        username = phone_number
         if password != confirm_password:
             raise serializers.ValidationError({'password': 'Passwords do not match.'})
 
@@ -28,7 +27,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError({'phone_number': 'This phone number is already registered.'})
 
         # Create the user
-        validated_data['username'] = username
+        validated_data['username'] = validated_data.pop('phone_number')
         user = UserModel.objects.create_user(**validated_data)
         user.set_password(password)
         user.save()
@@ -58,5 +57,3 @@ class LoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
         fields = ['phone_number', 'password']
-
-
