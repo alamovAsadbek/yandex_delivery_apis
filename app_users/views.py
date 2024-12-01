@@ -1,6 +1,7 @@
 from rest_framework import generics, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from app_common.pagination import CustomPagination
 from .models import UserModel
@@ -38,3 +39,23 @@ class LoginView(APIView):
             'success': True
         }
         return Response(response, status=status.HTTP_200_OK)
+
+
+class LogoutView(APIView):
+    def post(self, request, *args, **kwargs):
+        try:
+            refresh_token = request.data['refresh_token']
+            token = RefreshToken(refresh_token)
+            token.blacklist()
+            response = {
+                'success': True,
+                'message': 'Logout successful'
+
+            }
+            return Response(response, status=status.HTTP_200_OK)
+        except Exception as e:
+            response = {
+                'success': False,
+                'message': str(e)
+            }
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
