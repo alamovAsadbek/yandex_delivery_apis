@@ -9,6 +9,9 @@ from .serializers import UserModelSerializer, LoginSerializer
 
 
 class UserListView(viewsets.ModelViewSet):
+    """
+        API endpoint that allows users to be viewed or edited. This api for super admin only.
+    """
     serializer_class = UserModelSerializer
     queryset = UserModel.objects.all()
     # permission_classes = [IsAdminUser]
@@ -19,6 +22,9 @@ class UserListView(viewsets.ModelViewSet):
 
 
 class LoginView(APIView):
+    """
+        API endpoint that allows users to login.
+    """
     serializer_class = LoginSerializer
     queryset = UserModel.objects.all()
 
@@ -32,6 +38,10 @@ class LoginView(APIView):
 
 
 class LogoutView(APIView):
+    """
+        API endpoint that allows users to logout.
+    """
+
     def post(self, request, *args, **kwargs):
         try:
             refresh_token = request.data['refresh_token']
