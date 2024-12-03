@@ -101,9 +101,19 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'en'
 
-TIME_ZONE = 'UTC'
+LANGUAGES = [
+    ('en', 'English'),
+    ('uz', 'Uzbek'),
+    ('ru', 'Russian'),
+]
+
+LOCALE_PATHS = (
+    BASE_DIR / 'locale',
+)
+
+TIME_ZONE = 'Asia/Tashkent'
 
 USE_I18N = True
 
@@ -133,9 +143,17 @@ REST_FRAMEWORK = {
         'rest_framework_csv.renderers.CSVRenderer',
         'rest_framework_yaml.renderers.YAMLRenderer',
     ],
+
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ]
+    ],
+
+    'DEFAULT_PERMISSION_CLASSES': [
+       'rest_framework.permissions.AllowAny',
+    ],
+
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
 }
 
 # jwt settings
