@@ -13,6 +13,7 @@ class UserRoleChoice(models.TextChoices):
     COURIER = "courier", "Courier"
 
 
+
 class UserStatusChoice(models.TextChoices):
     """
     UserStatusChoice is a class that contains choices for the user status.
