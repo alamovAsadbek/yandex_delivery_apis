@@ -42,3 +42,4 @@ class UserModel(AbstractUser):
         max_length=20,
         choices=UserStatusChoice.choices)
     phone_number = models.CharField(max_length=15, unique=True)
+
