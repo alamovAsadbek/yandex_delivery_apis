@@ -9,7 +9,19 @@ User = get_user_model()
 
 
 class BranchModel(BaseModel):
-    name = models.CharField(max_length=64, verbose_name=_("Name"))
+    """
+    Represents a branch of a restaurant.
+    Attributes:
+        name (str): Name of the branch unique.
+        address (str): Address of the branch.
+        phone_number (str): Phone number of the branch.
+        longitude (float): Longitude of location of the branch.
+        latitude (float): Latitude of location of the branch.
+        manager (User): Manager of the branch.
+        restaurant (RestaurantModel): Restaurant the branch belongs to.
+        is_active (bool): Indicates whether the branch is active or not.
+    """
+    name = models.CharField(max_length=64, verbose_name=_("Name"), unique=True)
     address = models.CharField(max_length=255, verbose_name=_("Address"))
     phone_number = models.CharField(max_length=255, verbose_name=_("Phone Number"))
     longitude = models.FloatField()

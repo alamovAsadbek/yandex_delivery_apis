@@ -8,7 +8,16 @@ User = get_user_model()
 
 
 class RestaurantModel(BaseModel):
-    name = models.CharField(max_length=100, verbose_name=_('Name'))
+    """
+    Represents a restaurant in the system.
+    Attributes:
+        name (str): The name of the restaurant unique.
+        manager (User): The manager of the restaurant.
+        phone_number (str): The phone number of the restaurant.
+        logo (ImageField): The logo of the restaurant.
+        is_active (bool): Indicates whether the restaurant is active or not.
+    """
+    name = models.CharField(max_length=100, verbose_name=_('Name'), unique=True)
     manager = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
