@@ -16,7 +16,7 @@ class CategoryModel(models.Model):
         verbose_name_plural = 'Categories'
 
 
-class Products(models.Model):
+class ProductsModel(models.Model):
     name = models.CharField(max_length=200)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.BooleanField(default=True)
