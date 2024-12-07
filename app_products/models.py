@@ -1,6 +1,20 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from app_common.models import BaseModel
+
+
+class CategoryModel(models.Model):
+    name = models.CharField(max_length=200)
+    status = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        verbose_name = 'Category'
+        verbose_name_plural = 'Categories'
+
 
 class Products(models.Model):
     name = models.CharField(max_length=200)
@@ -14,5 +28,5 @@ class Products(models.Model):
         return _(self.name)
 
     class Meta:
-        verbose_name = _('Food')
-        verbose_name_plural = _('Foods')
+        verbose_name = 'Food'
+        verbose_name_plural = 'Foods'
