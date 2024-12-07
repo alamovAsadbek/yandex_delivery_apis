@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     # my apps
     'app_users',
     'app_common',
+    'app_company',
     'app_products',
     'app_deliveries',
 ]
@@ -149,7 +150,7 @@ REST_FRAMEWORK = {
     ],
 
     'DEFAULT_PERMISSION_CLASSES': [
-       'rest_framework.permissions.AllowAny',
+        'rest_framework.permissions.AllowAny',
     ],
 
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
