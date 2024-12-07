@@ -1,4 +1,5 @@
 from rest_framework import status, viewsets
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -72,6 +73,7 @@ class LogoutView(APIView):
 class GetAllProductsView(APIView):
     serializer_class = products_serializers.ProductSerializer
     queryset = products_models.ProductsModel.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         products = products_models.ProductsModel.objects.all()
