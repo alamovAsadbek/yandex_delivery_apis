@@ -47,3 +47,10 @@ class ProductImageModel(BaseModel):
     image = models.ImageField(upload_to='products/')
     is_main_image = models.BooleanField(default=False)
     status = models.BooleanField(default=True)
+
+    def __str__(self):
+        return self.product.name
+
+    class Meta:
+        verbose_name = 'Product Image'
+        verbose_name_plural = 'Product Images'
