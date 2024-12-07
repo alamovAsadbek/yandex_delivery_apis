@@ -1,9 +1,11 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from app_company import models as company_models
+
 
 class ProductsModel(models.Model):
-    restaurant = models.ForeignKey('app_company.RestaurantModel', on_delete=models.CASCADE, related_name='products')
+    restaurant = models.ForeignKey(company_models.RestaurantModel, on_delete=models.CASCADE, related_name='products')
     name = models.CharField(max_length=200)
     description = models.TextField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
@@ -21,7 +23,7 @@ class ProductsModel(models.Model):
 
 
 class ProductImageModel(models.Model):
-    product = models.ForeignKey('ProductsModel', on_delete=models.CASCADE, related_name='images')
+    product = models.ForeignKey(ProductsModel, on_delete=models.CASCADE, related_name='images')
     image = models.ImageField(upload_to='products')
 
     created_at = models.DateTimeField(auto_now_add=True)
