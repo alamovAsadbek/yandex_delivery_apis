@@ -36,3 +36,14 @@ class ProductsModel(models.Model):
     class Meta:
         verbose_name = 'Food'
         verbose_name_plural = 'Foods'
+
+
+class ProductImageModel(BaseModel):
+    product = models.ForeignKey(
+        ProductsModel,
+        on_delete=models.CASCADE,
+        related_name="images"
+    )
+    image = models.ImageField(upload_to='products/')
+    is_main_image = models.BooleanField(default=False)
+    status = models.BooleanField(default=True)
