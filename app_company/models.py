@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
 from django.utils.translation import gettext_lazy as _
 
 from app_common.models import BaseModel
@@ -21,6 +21,7 @@ class RestaurantModel(BaseModel):
     manager = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
+        null=True,
         related_name="restaurants",
         verbose_name=_('Manager')
     )
