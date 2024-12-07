@@ -66,9 +66,3 @@ class LoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
         fields = ['phone_number', 'password']
-
-
-class ProductModelSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = UserModel
-        fields = ['id', 'first_name', 'last_name', 'phone_number']
