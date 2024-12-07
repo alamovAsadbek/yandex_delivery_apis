@@ -18,3 +18,18 @@ class ProductsModel(models.Model):
     class Meta:
         verbose_name = _('Food')
         verbose_name_plural = _('Foods')
+
+
+class ProductImageModel(models.Model):
+    product = models.ForeignKey('ProductsModel', on_delete=models.CASCADE, related_name='images')
+    image = models.ImageField(upload_to='products')
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.product.name
+
+    class Meta:
+        verbose_name = _('Product Image')
+        verbose_name_plural = _('Product Images')
