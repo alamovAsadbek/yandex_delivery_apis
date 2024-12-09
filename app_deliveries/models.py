@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
+from app_basket.models import BasketModel
 from app_branch.models import BranchModel
 from app_common.models import BaseModel
+from app_company.models import RestaurantModel
 from app_products.models import ProductsModel
 from app_users.models import UserLocations
 
@@ -15,7 +17,6 @@ class OrderStatus(models.TextChoices):
     """
     PENDING_COURIER = 'pending_for_courier', 'Pending for a Courier'
     PENDING_RESTAURANT = 'pending_for_restaurant', 'Pending for a Restaurant'
-    CONFIRMED_COURIER = 'confirmed_by_courier', 'Confirmed by a Courier'
     CONFIRMED_RESTAURANT = 'confirmed_by_restaurant', 'Confirmed by a Restaurant'
     DELIVERING = 'delivering', 'Delivering'
     DELIVERED = 'delivered', 'Delivered'
@@ -51,6 +52,7 @@ class OrderItemModel(models.Model):
 class OrderModel(BaseModel):
     """
     Order model represents an order placed by a user in the application.
+    restaurant: The restaurant where the order is placed.
     branch: The branch where the order is placed.
     user: The user who placed the order.
     courier: The courier assigned to the order.
@@ -58,6 +60,13 @@ class OrderModel(BaseModel):
     order_items: The items in the order.
     delivery_address: The address where the order is to be delivered.
     """
+    restaurant = models.ForeignKey(
+        RestaurantModel,
+        on_delete=models.SET_NULL,
+        related_name='orders',
+        verbose_name='Restaurant',
+        null=True
+    )
     branch = models.ForeignKey(
         BranchModel,
         on_delete=models.SET_NULL,
