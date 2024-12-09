@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 
 from app_common.models import BaseModel
 from app_products.models import ProductsModel
+from app_users.models import UserLocations
 
 User = get_user_model()
 
@@ -53,6 +54,12 @@ class OrderModel(BaseModel):
         OrderItemModel,
         related_name='orders',
         verbose_name='Order Items'
+    )
+    delivery_address = models.ForeignKey(
+        UserLocations,
+        on_delete=models.CASCADE,
+        related_name='orders',
+        verbose_name='Delivery Address'
     )
 
     def __str__(self):
