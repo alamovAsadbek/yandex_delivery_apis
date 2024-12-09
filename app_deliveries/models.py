@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
+from app_basket.models import BasketModel
 from app_branch.models import BranchModel
 from app_common.models import BaseModel
 from app_company.models import RestaurantModel
@@ -16,7 +17,6 @@ class OrderStatus(models.TextChoices):
     """
     PENDING_COURIER = 'pending_for_courier', 'Pending for a Courier'
     PENDING_RESTAURANT = 'pending_for_restaurant', 'Pending for a Restaurant'
-    CONFIRMED_COURIER = 'confirmed_by_courier', 'Confirmed by a Courier'
     CONFIRMED_RESTAURANT = 'confirmed_by_restaurant', 'Confirmed by a Restaurant'
     DELIVERING = 'delivering', 'Delivering'
     DELIVERED = 'delivered', 'Delivered'
@@ -60,6 +60,12 @@ class OrderModel(BaseModel):
     order_items: The items in the order.
     delivery_address: The address where the order is to be delivered.
     """
+    basket = models.OneToOneField(
+        BasketModel,
+        on_delete=models.SET_NULL,
+        related_name='basket',
+        verbose_name='Basket'
+    )
     restaurant = models.ForeignKey(
         RestaurantModel,
         on_delete=models.SET_NULL,
