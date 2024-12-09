@@ -33,6 +33,9 @@ INSTALLED_APPS = [
     # jwt auth
     'rest_framework_simplejwt',
 
+    # Swagger
+    'drf_yasg',
+
     # my apps
     'app_users',
     'app_common',
