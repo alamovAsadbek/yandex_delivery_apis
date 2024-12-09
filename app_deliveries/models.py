@@ -60,12 +60,6 @@ class OrderModel(BaseModel):
     order_items: The items in the order.
     delivery_address: The address where the order is to be delivered.
     """
-    basket = models.OneToOneField(
-        BasketModel,
-        on_delete=models.SET_NULL,
-        related_name='basket',
-        verbose_name='Basket'
-    )
     restaurant = models.ForeignKey(
         RestaurantModel,
         on_delete=models.SET_NULL,
