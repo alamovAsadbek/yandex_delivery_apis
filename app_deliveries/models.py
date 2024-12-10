@@ -76,18 +76,20 @@ class OrderModel(BaseModel):
     )
     user = models.ForeignKey(
         User,
-        on_delete=models.CASCADE,
-        related_name='orders',
-        verbose_name='User'
+        on_delete=models.SET_NULL,
+        related_name='my_orders',
+        verbose_name='User',
+        null=True
     )
     courier = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
-        related_name='orders',
-        verbose_name='Courier'
+        related_name='my_delivering',
+        verbose_name='Courier',
+        null=True
     )
     order_status = models.CharField(
-        max_length=20,
+        max_length=25,
         choices=OrderStatus.choices,
         default=OrderStatus.PENDING_COURIER,
         verbose_name='Order Status'

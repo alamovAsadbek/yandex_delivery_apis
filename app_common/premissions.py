@@ -13,7 +13,7 @@ class IsRestaurant(BasePermission):
         return request.user.role == UserRoleChoice.RESTAURANT
 
 
-class IsDelivery(BasePermission):
+class IsBranch(BasePermission):
     def has_object_permission(self, request, view, obj):
         return request.user.role == UserRoleChoice.DELIVERY
 
@@ -26,3 +26,8 @@ class IsCourier(BasePermission):
 class IsUserOrReadOnly(BasePermission):
     def has_object_permission(self, request, view, obj):
         return request.method in SAFE_METHODS or request.user.is_authenticated and request.user == obj
+
+
+class IsOwnerOrReadOnly(BasePermission):
+    def has_object_permission(self, request, view, obj):
+        return request.method in SAFE_METHODS or request.user.is_authenticated and request.user == obj.user
