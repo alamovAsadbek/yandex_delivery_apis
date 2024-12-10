@@ -1,11 +1,12 @@
+from app_common.pagination import CustomPagination
 from rest_framework import status, viewsets
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
-from app_common.pagination import CustomPagination
+from app_products.models import ProductsModel
 from .models import UserModel
-from .serializers import UserModelSerializer, LoginSerializer
+from .serializers import UserModelSerializer, LoginSerializer, ProductModelSerializer
 
 
 class UserListView(viewsets.ModelViewSet):
@@ -65,3 +66,13 @@ class LogoutView(APIView):
                 'message': str(e)
             }
             return Response(response, status=status.HTTP_400_BAD_REQUEST)
+
+
+class GetAllProductsView(APIView):
+    serializer_class = ProductModelSerializer
+    queryset = ProductsModel.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        products = ProductsModel.objects.all()
+        serializer = ProductModelSerializer(products, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)

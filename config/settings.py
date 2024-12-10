@@ -33,6 +33,9 @@ INSTALLED_APPS = [
     # jwt auth
     'rest_framework_simplejwt',
 
+    # Swagger
+    'drf_yasg',
+
     # my apps
     'app_users',
     'app_common',
@@ -103,15 +106,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en'
 
-LANGUAGES = [
-    ('en', 'English'),
-    ('uz', 'Uzbek'),
-    ('ru', 'Russian'),
-]
-
-LOCALE_PATHS = (
-    BASE_DIR / 'locale',
-)
 
 TIME_ZONE = 'Asia/Tashkent'
 
