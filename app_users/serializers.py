@@ -65,16 +65,12 @@ class UserModelSerializer(serializers.ModelSerializer):
         return value
 
 
-class LoginSerializer(serializers.ModelSerializer):
+class LoginSerializer(serializers.Serializer):
     """
     Serializer for login. It includes the fields for phone_number and password.
     """
     phone_number = serializers.CharField(write_only=True)
     password = serializers.CharField(write_only=True)
-
-    class Meta:
-        model = UserModel
-        fields = ['phone_number', 'password']
 
 
 class ProductModelSerializer(serializers.ModelSerializer):

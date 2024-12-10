@@ -32,6 +32,7 @@ class LoginView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
+        serializer.validated_data.get('phone_number')
         refresh = RefreshToken.for_user(serializer.validated_data['user'])
         response = {
             'success': True,

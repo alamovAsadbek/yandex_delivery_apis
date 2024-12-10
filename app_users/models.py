@@ -11,7 +11,7 @@ class UserRoleChoice(models.TextChoices):
     ADMIN = "admin", "Admin"
     USER = "user", "User"
     RESTAURANT = "restaurant", "Restaurant"
-    DELIVERY = "delivery", "Delivery"
+    BRANCH = "branch", "Branch"
     COURIER = "courier", "Courier"
 
 
