@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from app_basket.models import BasketModel
+from app_company.models import RestaurantModel
 from app_deliveries.models import OrderModel, OrderItemModel
 
 
@@ -22,6 +22,7 @@ class OrderSerializer(serializers.ModelSerializer):
         for item in basket.items.all():
             # Create an order item for each item in the basket
             item_data = dict()
+
             item_data['price_per_item'] = item.product.price
             item_data['quantity'] = item.quantity
             item_data['total_price'] = item.product.price * item.quantity
@@ -58,7 +59,45 @@ class OrderSerializer(serializers.ModelSerializer):
         Customize the representation of the order data.
         """
         # Add the total items and total price to the representation
-        representation = super().to_representation(instance)
-        representation['total_items'] = instance.total_items
-        representation['total_price'] = instance.total_price
-        return representation
+        data = super().to_representation(instance)
+        data.pop('is_deleted', None)
+
+        data['restaurant'] = {
+            "id": instance.restaurant.id,
+            "name": instance.restaurant.name
+        }
+        data['branch'] = {
+            "id": instance.branch.id,
+            "unique_name": instance.branch.name,
+            "phone_number": instance.branch.user.phone_number,
+            "address": instance.branch.address
+        }
+        data['user'] = {
+            "id": instance.user.id,
+            "first_name": instance.user.first_name,
+            "phone_number": instance.user.phone_number
+        }
+        data['courier'] = {
+            "id": instance.courier.id,
+            "unique_name": instance.courier.courier.name,
+            "first_name": instance.courier.first_name,
+            "phone_number": instance.courier.phone_number
+        }
+        data['delivery_address'] = {
+            "id": instance.delivery_address.id,
+            "address": instance.delivery_address.address
+        }
+        data['order_items'] = [
+            {
+                'product_id': item.product.id,
+                'product_name': item.product.name,
+                'product_category_id': item.product.category.id,
+                'product_category_name': item.product.category.name,
+                'quantity': item.quantity,
+                'price_per_item': item.price_per_item,
+                'total_price': item.total_price
+            } for item in instance.items.all()
+        ]
+        data['total_items'] = instance.total_items
+        data['total_price'] = instance.total_price
+        return data
