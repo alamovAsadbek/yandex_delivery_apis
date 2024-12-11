@@ -106,21 +106,4 @@ class OrderModel(BaseModel):
         verbose_name='Delivery Address'
     )
 
-    def __str__(self):
-        return f"Order #{self.pk} | User: {self.user.phone_number}"
-
-    @property
-    def items(self):
-        return self.order_items.all()
-
-    @property
-    def total_price(self):
-        return sum(item.total_price for item in self.items)
-
-    @property
-    def total_items(self):
-        return sum(item.quantity for item in self.items)
-
-    class Meta:
-        verbose_name = 'Order'
-        verbose_name_plural = 'Orders'
+# Create your models here.
