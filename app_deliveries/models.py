@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth import get_user_model
 
+from app_basket.models import BasketModel
 from app_branch.models import BranchModel
 from app_common.models import BaseModel
+from app_company.models import RestaurantModel
 from app_products.models import ProductsModel
 from app_users.models import UserLocations
 
@@ -15,11 +17,10 @@ class OrderStatus(models.TextChoices):
     """
     PENDING_COURIER = 'pending_for_courier', 'Pending for a Courier'
     PENDING_RESTAURANT = 'pending_for_restaurant', 'Pending for a Restaurant'
-    CONFIRMED_COURIER = 'confirmed_by_courier', 'Confirmed by a Courier'
     CONFIRMED_RESTAURANT = 'confirmed_by_restaurant', 'Confirmed by a Restaurant'
     DELIVERING = 'delivering', 'Delivering'
     DELIVERED = 'delivered', 'Delivered'
-    CANCELLED = 'cancelled', 'Cancelled'
+    CANCELED = 'canceled', 'Canceled'
 
 
 class OrderItemModel(models.Model):
@@ -33,12 +34,12 @@ class OrderItemModel(models.Model):
     product = models.ForeignKey(
         ProductsModel,
         on_delete=models.CASCADE,
-        related_name='order_items',
+        related_name='items',
         verbose_name='Product'
     )
     quantity = models.PositiveIntegerField(default=1)
-    price_per_item = models.PositiveIntegerField()
-    total_price = models.PositiveIntegerField()
+    price_per_item = models.DecimalField(max_digits=10, decimal_places=2)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return f"{self.quantity}x {self.product.name}"
@@ -51,6 +52,7 @@ class OrderItemModel(models.Model):
 class OrderModel(BaseModel):
     """
     Order model represents an order placed by a user in the application.
+    restaurant: The restaurant where the order is placed.
     branch: The branch where the order is placed.
     user: The user who placed the order.
     courier: The courier assigned to the order.
@@ -58,6 +60,13 @@ class OrderModel(BaseModel):
     order_items: The items in the order.
     delivery_address: The address where the order is to be delivered.
     """
+    restaurant = models.ForeignKey(
+        RestaurantModel,
+        on_delete=models.SET_NULL,
+        related_name='orders',
+        verbose_name='Restaurant',
+        null=True
+    )
     branch = models.ForeignKey(
         BranchModel,
         on_delete=models.SET_NULL,
@@ -67,18 +76,20 @@ class OrderModel(BaseModel):
     )
     user = models.ForeignKey(
         User,
-        on_delete=models.CASCADE,
-        related_name='orders',
-        verbose_name='User'
+        on_delete=models.SET_NULL,
+        related_name='my_orders',
+        verbose_name='User',
+        null=True
     )
     courier = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
-        related_name='orders',
-        verbose_name='Courier'
+        related_name='my_delivering',
+        verbose_name='Courier',
+        null=True
     )
     order_status = models.CharField(
-        max_length=20,
+        max_length=25,
         choices=OrderStatus.choices,
         default=OrderStatus.PENDING_COURIER,
         verbose_name='Order Status'
@@ -95,21 +106,4 @@ class OrderModel(BaseModel):
         verbose_name='Delivery Address'
     )
 
-    def __str__(self):
-        return f"Order #{self.pk} | User: {self.user.phone_number}"
-
-    @property
-    def items(self):
-        return self.order_items.all()
-
-    @property
-    def total_price(self):
-        return sum(item.total_price for item in self.items)
-
-    @property
-    def total_items(self):
-        return sum(item.quantity for item in self.items)
-
-    class Meta:
-        verbose_name = 'Order'
-        verbose_name_plural = 'Orders'
+# Create your models here.
