@@ -1,5 +1,4 @@
 from django.db import models
-from django.utils.translation import gettext_lazy as _
 
 from app_common.models import BaseModel
 
@@ -43,7 +42,7 @@ class ProductsModel(BaseModel):
     status = models.BooleanField(default=True)
 
     def __str__(self):
-        return _(self.name)
+        return self.name
 
     class Meta:
         verbose_name = 'Food'

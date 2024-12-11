@@ -4,8 +4,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
 
+from app_products.models import ProductsModel
 from .models import UserModel
-from .serializers import UserModelSerializer, LoginSerializer
+from .serializers import UserModelSerializer, LoginSerializer, ProductModelSerializer
 
 
 class UserListView(viewsets.ModelViewSet):
@@ -31,13 +32,17 @@ class LoginView(APIView):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data)
         serializer.is_valid(raise_exception=True)
-        refresh = RefreshToken.for_user(serializer.validated_data['user'])
+        phone_number = serializer.validated_data.get('phone_number')
+        user = UserModel.objects.get(phone_number=phone_number)
+        refresh = RefreshToken.for_user(user)
         response = {
             'success': True,
             'message': 'Login successful',
             'token': {
                 'access': str(refresh.access_token),
-                'refresh': str(refresh)
+                'refresh': str(refresh),
+                'user_id': user.id,
+                'phone_number': user.phone_number
             }
         }
         return Response(response, status=status.HTTP_200_OK)
@@ -50,7 +55,7 @@ class LogoutView(APIView):
 
     def post(self, request, *args, **kwargs):
         try:
-            refresh_token = request.data['refresh_token']
+            refresh_token = request.data.get('refresh_token')
             token = RefreshToken(refresh_token)
             token.blacklist()
             response = {
@@ -69,9 +74,9 @@ class LogoutView(APIView):
 
 class GetAllProductsView(APIView):
     serializer_class = ProductModelSerializer
-    queryset = ProductModel.objects.all()
+    queryset = ProductsModel.objects.all()
 
     def get(self, request, *args, **kwargs):
-        products = ProductModel.objects.all()
+        products = ProductsModel.objects.all()
         serializer = ProductModelSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
