@@ -66,3 +66,41 @@ class LoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserModel
         fields = ['phone_number', 'password']
+
+
+class ChangePasswordSerializer(serializers.ModelSerializer):
+    """
+    Serializer for changing password. It includes the fields for old_password, new_password, and confirm_password.
+    """
+    old_password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True)
+    confirm_password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = UserModel
+        fields = ['old_password', 'new_password', 'confirm_password']
+
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError('Old password is incorrect.')
+        return value
+
+    def validate_new_password(self, value):
+        if len(value) < 8:
+            raise serializers.ValidationError('Password must be at least 8 characters long.')
+        elif not any(char.isdigit() for char in value):
+            raise serializers.ValidationError('Password must contain at least one digit.')
+        elif not any(char.isalpha() for char in value):
+            raise serializers.ValidationError('Password must contain at least one letter.')
+        return value
+
+    def validate(self, data):
+        if data['new_password'] != data['confirm_password']:
+            raise serializers.ValidationError({'confirm_password': 'Passwords do not match.'})
+        return data
+
+    def update(self, instance, validated_data):
+        instance.set_password(validated_data['new_password'])
+        instance.save()
+        return instance

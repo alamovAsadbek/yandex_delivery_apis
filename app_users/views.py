@@ -8,7 +8,7 @@ from app_common.pagination import CustomPagination
 from app_products import models as products_models
 from app_products import serializers as products_serializers
 from .models import UserModel
-from .serializers import UserModelSerializer, LoginSerializer
+from .serializers import UserModelSerializer, LoginSerializer, ChangePasswordSerializer
 
 
 class UserListView(viewsets.ModelViewSet):
@@ -71,6 +71,10 @@ class LogoutView(APIView):
 
 
 class GetAllProductsView(APIView):
+    """
+        API endpoint that allows users to get all products.
+        Access: Only authenticated users.
+    """
     serializer_class = products_serializers.ProductSerializer
     queryset = products_models.ProductsModel.objects.all()
     permission_classes = [IsAuthenticated]
@@ -79,3 +83,56 @@ class GetAllProductsView(APIView):
         products = products_models.ProductsModel.objects.all()
         serializer = products_serializers.ProductSerializer(products, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class GetActiveUserView(APIView):
+    """
+        API endpoint that allows users to get yourself.
+        Access: Only authenticated users.
+    """
+    serializer_class = UserModelSerializer
+    queryset = UserModel.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        serializer = UserModelSerializer(user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class UpdateProfileView(APIView):
+    """
+        API endpoint that allows users to update their profile.
+        Access: Only authenticated users.
+    """
+    serializer_class = UserModelSerializer
+    queryset = UserModel.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, *args, **kwargs):
+        user = request.user
+        serializer = UserModelSerializer(user, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class ChangePasswordView(APIView):
+    serializer_class = ChangePasswordSerializer
+    queryset = UserModel.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def put(self, request, *args, **kwargs):
+        user = request.user
+        serializer = ChangePasswordSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        response = {}
+        if not user.check_password(serializer.data.get("old_password")):
+            response["old_password"] = "Old password is incorrect."
+            return Response(response, status=status.HTTP_400_BAD_REQUEST)
+        user.set_password(serializer.data.get("new_password"))
+        user.save()
+        response["success"] = True
+        response["message"] = "Password updated successfully."
+        return Response(response, status=status.HTTP_200_OK)
+
