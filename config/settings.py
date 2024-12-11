@@ -37,11 +37,14 @@ INSTALLED_APPS = [
     'drf_yasg',
 
     # my apps
-    'app_users',
+    'app_basket',
+    'app_branch',
     'app_common',
-    'app_products',
-    'app_deliveries',
     'app_company',
+    'app_courier',
+    'app_deliveries',
+    'app_products',
+    'app_users',
 ]
 
 MIDDLEWARE = [

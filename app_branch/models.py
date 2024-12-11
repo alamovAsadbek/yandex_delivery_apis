@@ -13,24 +13,12 @@ class BranchModel(BaseModel):
     Attributes:
         name (str): Name of the branch unique.
         address (str): Address of the branch.
-        phone_number (str): Phone number of the branch.
-        longitude (float): Longitude of location of the branch.
-        latitude (float): Latitude of location of the branch.
-        manager (User): Manager of the branch.
         restaurant (RestaurantModel): Restaurant the branch belongs to.
         is_active (bool): Indicates whether the branch is active or not.
     """
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="branches", null=True)
     name = models.CharField(max_length=64, verbose_name="Name", unique=True)
     address = models.CharField(max_length=255, verbose_name="Address")
-    phone_number = models.CharField(max_length=255, verbose_name="Phone Number")
-    longitude = models.FloatField()
-    latitude = models.FloatField()
-    manager = models.ForeignKey(
-        User,
-        on_delete=models.SET_NULL,
-        related_name="branches",
-        verbose_name="Manager"
-    )
     restaurant = models.ForeignKey(
         RestaurantModel,
         on_delete=models.CASCADE,
