@@ -13,6 +13,7 @@ from drf_yasg import openapi
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('app_common.urls')),
+    path('superadmin/', include('app_admin.urls'))
 ]
 
 # JWT Authentication
