@@ -20,7 +20,7 @@ class OrderStatus(models.TextChoices):
     CONFIRMED_RESTAURANT = 'confirmed_by_restaurant', 'Confirmed by a Restaurant'
     DELIVERING = 'delivering', 'Delivering'
     DELIVERED = 'delivered', 'Delivered'
-    CANCELLED = 'cancelled', 'Cancelled'
+    CANCELED = 'canceled', 'Canceled'
 
 
 class OrderItemModel(models.Model):
@@ -34,12 +34,12 @@ class OrderItemModel(models.Model):
     product = models.ForeignKey(
         ProductsModel,
         on_delete=models.CASCADE,
-        related_name='order_items',
+        related_name='items',
         verbose_name='Product'
     )
     quantity = models.PositiveIntegerField(default=1)
-    price_per_item = models.PositiveIntegerField()
-    total_price = models.PositiveIntegerField()
+    price_per_item = models.DecimalField(max_digits=10, decimal_places=2)
+    total_price = models.DecimalField(max_digits=10, decimal_places=2)
 
     def __str__(self):
         return f"{self.quantity}x {self.product.name}"
@@ -76,18 +76,20 @@ class OrderModel(BaseModel):
     )
     user = models.ForeignKey(
         User,
-        on_delete=models.CASCADE,
-        related_name='orders',
-        verbose_name='User'
+        on_delete=models.SET_NULL,
+        related_name='my_orders',
+        verbose_name='User',
+        null=True
     )
     courier = models.ForeignKey(
         User,
         on_delete=models.SET_NULL,
-        related_name='orders',
-        verbose_name='Courier'
+        related_name='my_delivering',
+        verbose_name='Courier',
+        null=True
     )
     order_status = models.CharField(
-        max_length=20,
+        max_length=25,
         choices=OrderStatus.choices,
         default=OrderStatus.PENDING_COURIER,
         verbose_name='Order Status'
@@ -104,21 +106,4 @@ class OrderModel(BaseModel):
         verbose_name='Delivery Address'
     )
 
-    def __str__(self):
-        return f"Order #{self.pk} | User: {self.user.phone_number}"
-
-    @property
-    def items(self):
-        return self.order_items.all()
-
-    @property
-    def total_price(self):
-        return sum(item.total_price for item in self.items)
-
-    @property
-    def total_items(self):
-        return sum(item.quantity for item in self.items)
-
-    class Meta:
-        verbose_name = 'Order'
-        verbose_name_plural = 'Orders'
+# Create your models here.

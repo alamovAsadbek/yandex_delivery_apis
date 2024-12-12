@@ -9,4 +9,4 @@ class ManagerAdmin(admin.ModelAdmin):
 
 @admin.register(UserModel)
 class CourierAdmin(admin.ModelAdmin):
-    list_display = ['name', 'phone_number', 'vehicle_type', 'is_available']
+    list_display = ['name']

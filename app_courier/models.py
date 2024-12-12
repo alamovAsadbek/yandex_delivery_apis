@@ -14,7 +14,7 @@ class CourierModel(BaseModel):
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="couriers",
+        related_name="courier",
         verbose_name="User"
     )
 
